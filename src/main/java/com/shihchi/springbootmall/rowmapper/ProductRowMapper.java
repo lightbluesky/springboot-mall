@@ -1,5 +1,6 @@
 package com.shihchi.springbootmall.rowmapper;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -13,7 +14,7 @@ public class ProductRowMapper implements RowMapper<Product> {
         Product product = new Product();
         product.setProductId(resultSet.getInt("product_id"));
         product.setProductName(resultSet.getString("product_name"));
-        product.setCategory(resultSet.getString("category"));
+        product.setCategory(ProductCategoryEnum.valueOf(resultSet.getString("category")));
         product.setImageUrl(resultSet.getString("image_url"));
         product.setPrice(resultSet.getInt("price"));
         product.setStock(resultSet.getInt("stock"));

@@ -1,12 +1,14 @@
 package com.shihchi.springbootmall.model;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
+
 import java.util.Date;
 
 public class Product {
 
     private Integer productId;
     private String productName;
-    private String category;
+    private ProductCategoryEnum category;
     private String imageUrl;
     private Integer price;
     private Integer stock;
@@ -30,11 +32,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getCategory() {
+    public ProductCategoryEnum getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategoryEnum category) {
         this.category = category;
     }
 
