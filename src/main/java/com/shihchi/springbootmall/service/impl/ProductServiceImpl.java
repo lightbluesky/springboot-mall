@@ -1,6 +1,7 @@
 package com.shihchi.springbootmall.service.impl;
 
 import com.shihchi.springbootmall.dao.ProductDao;
+import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 import com.shihchi.springbootmall.service.ProductService;
 import org.slf4j.Logger;
@@ -23,6 +24,16 @@ public class ProductServiceImpl implements ProductService {
         }
         catch (Exception e) {
             logger.error("Get Product By Id error - productId = {} - {}", productId, e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public Integer createProduct(ProductRequest productRequest) {
+        try {
+            return productDao.createProduct(productRequest);
+        } catch (Exception e) {
+            logger.error("Create product error - productName = {} - {}", productRequest.getProductName(), e.getMessage());
             throw e;
         }
     }
