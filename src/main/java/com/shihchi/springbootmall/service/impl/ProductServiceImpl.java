@@ -37,4 +37,14 @@ public class ProductServiceImpl implements ProductService {
             throw e;
         }
     }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+        try {
+            productDao.updateProduct(productId, productRequest);
+        } catch (Exception e) {
+            logger.error("Update product error - productId = {}, productName = {} - {}", productId, productRequest.getProductName(), e.getMessage());
+            throw e;
+        }
+    }
 }
