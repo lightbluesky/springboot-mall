@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ProductServiceImpl implements ProductService {
 
@@ -16,6 +18,16 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     private Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+    @Override
+    public List<Product> getProducts() {
+        try {
+            return productDao.getProducts();
+        } catch (Exception e) {
+            logger.error("Get Products error - {}", e.getMessage());
+            throw e;
+        }
+    }
 
     @Override
     public Product getProductById(Integer productId) {

@@ -3,7 +3,11 @@ package com.shihchi.springbootmall.service;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 
+import java.util.List;
+
 public interface ProductService {
+
+    List<Product> getProducts();
 
     Product getProductById(Integer productId);
 
