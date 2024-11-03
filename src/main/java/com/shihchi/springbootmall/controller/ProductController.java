@@ -10,11 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 public class ProductController {
 
@@ -28,7 +32,10 @@ public class ProductController {
             @RequestParam(required = false) ProductCategoryEnum category,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "created_date") String orderBy,
-            @RequestParam(defaultValue = "DESC") String sort
+            @RequestParam(defaultValue = "DESC") String sort,
+            // 分頁 pagination - 這次要取得幾筆數據 / 跳過多少筆數據
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset
     ) {
         try {
             ProductQueryParams params = new ProductQueryParams();
@@ -36,6 +43,8 @@ public class ProductController {
             params.setSearch(search);
             params.setOrderBy(orderBy);
             params.setSort(sort);
+            params.setLimit(limit);
+            params.setOffset(offset);
 
             List<Product> list = productService.getProducts(params);
             return ResponseEntity.status(HttpStatus.OK).body(list);
