@@ -1,7 +1,7 @@
 package com.shihchi.springbootmall.dao.impl;
 
-import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.dao.ProductDao;
+import com.shihchi.springbootmall.dao.ProductQueryParams;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 import com.shihchi.springbootmall.rowmapper.ProductRowMapper;
@@ -25,23 +25,20 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private static Logger logger = LoggerFactory.getLogger(ProductDaoImpl.class);
-
     @Override
-    public List<Product> getProducts(ProductCategoryEnum productCategoryEnum,
-                                     String search) {
+    public List<Product> getProducts(ProductQueryParams params) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, " +
                 "last_modified_date FROM product WHERE 1=1";
         Map<String,Object> map = new HashMap<>();
 
-        if(productCategoryEnum != null) {
+        if(params.getCategory() != null) {
             sql = sql + " AND category = :category";
-            map.put("category", productCategoryEnum.name());
+            map.put("category", params.getCategory().name());
         }
 
-        if(search != null && !search.isEmpty()) {
+        if(params.getSearch() != null && !params.getSearch().isEmpty()) {
             sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + search + "%");
+            map.put("search", "%" + params.getSearch() + "%");
         }
 
         return namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
