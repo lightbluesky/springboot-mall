@@ -12,6 +12,8 @@ public interface ProductService {
 
     Product getProductById(Integer productId);
 
+    Integer countProduct(ProductQueryParams params);
+
     Integer createProduct(ProductRequest productRequest);
 
     void updateProduct(Integer productId, ProductRequest productRequest);

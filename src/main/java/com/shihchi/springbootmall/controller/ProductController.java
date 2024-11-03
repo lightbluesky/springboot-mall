@@ -5,6 +5,7 @@ import com.shihchi.springbootmall.dao.ProductQueryParams;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 import com.shihchi.springbootmall.service.ProductService;
+import com.shihchi.springbootmall.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
             @RequestParam(required = false) ProductCategoryEnum category,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "created_date") String orderBy,
@@ -47,7 +48,15 @@ public class ProductController {
             params.setOffset(offset);
 
             List<Product> list = productService.getProducts(params);
-            return ResponseEntity.status(HttpStatus.OK).body(list);
+            Integer total = productService.countProduct(params);
+
+            Page<Product> page = new Page<>();
+            page.setLimit(limit);
+            page.setOffset(offset);
+            page.setResults(list);
+            page.setTotal(total);
+
+            return ResponseEntity.status(HttpStatus.OK).body(page);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
