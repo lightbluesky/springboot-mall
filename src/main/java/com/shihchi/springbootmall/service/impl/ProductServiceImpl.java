@@ -47,4 +47,14 @@ public class ProductServiceImpl implements ProductService {
             throw e;
         }
     }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        try {
+            productDao.deleteProductById(productId);
+        } catch (Exception e) {
+            logger.error("Update product error - productId = {} - {}", productId, e.getMessage());
+            throw e;
+        }
+    }
 }
