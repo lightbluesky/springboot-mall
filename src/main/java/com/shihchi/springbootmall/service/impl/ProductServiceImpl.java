@@ -1,5 +1,6 @@
 package com.shihchi.springbootmall.service.impl;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.dao.ProductDao;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
@@ -20,9 +21,10 @@ public class ProductServiceImpl implements ProductService {
     private Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategoryEnum productCategoryEnum,
+                                     String search) {
         try {
-            return productDao.getProducts();
+            return productDao.getProducts(productCategoryEnum, search);
         } catch (Exception e) {
             logger.error("Get Products error - {}", e.getMessage());
             throw e;

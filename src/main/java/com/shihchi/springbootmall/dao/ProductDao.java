@@ -1,5 +1,6 @@
 package com.shihchi.springbootmall.dao;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface ProductDao {
 
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategoryEnum productCategoryEnum, String search);
 
     Product getProductById(Integer productId);
 

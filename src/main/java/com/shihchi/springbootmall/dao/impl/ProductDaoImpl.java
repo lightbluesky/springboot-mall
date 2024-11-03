@@ -1,5 +1,6 @@
 package com.shihchi.springbootmall.dao.impl;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.dao.ProductDao;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
@@ -27,10 +28,22 @@ public class ProductDaoImpl implements ProductDao {
     private static Logger logger = LoggerFactory.getLogger(ProductDaoImpl.class);
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategoryEnum productCategoryEnum,
+                                     String search) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, " +
-                "last_modified_date FROM product";
+                "last_modified_date FROM product WHERE 1=1";
         Map<String,Object> map = new HashMap<>();
+
+        if(productCategoryEnum != null) {
+            sql = sql + " AND category = :category";
+            map.put("category", productCategoryEnum.name());
+        }
+
+        if(search != null && !search.isEmpty()) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + search + "%");
+        }
+
         return namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
     }
 

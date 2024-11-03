@@ -1,5 +1,6 @@
 package com.shihchi.springbootmall.controller;
 
+import com.shihchi.springbootmall.constant.ProductCategoryEnum;
 import com.shihchi.springbootmall.dto.ProductRequest;
 import com.shihchi.springbootmall.model.Product;
 import com.shihchi.springbootmall.service.ProductService;
@@ -22,9 +23,12 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategoryEnum category,
+            @RequestParam(required = false) String search
+    ) {
         try {
-            List<Product> list = productService.getProducts();
+            List<Product> list = productService.getProducts(category, search);
             return ResponseEntity.status(HttpStatus.OK).body(list);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
