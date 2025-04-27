@@ -31,15 +31,7 @@ public class ProductDaoImpl implements ProductDao {
                 "last_modified_date FROM product WHERE 1=1";
         Map<String,Object> map = new HashMap<>();
 
-        if(params.getCategory() != null) {
-            sql = sql + " AND category = :category";
-            map.put("category", params.getCategory().name());
-        }
-
-        if(params.getSearch() != null && !params.getSearch().isEmpty()) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + params.getSearch() + "%");
-        }
+        sql = addFilterySql(sql, map, params);
 
         sql = sql + " ORDER BY " + params.getOrderBy() + " " + params.getSort() +
             " LIMIT :limit OFFSET :offset";
@@ -70,15 +62,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "SELECT COUNT(1) FROM product WHERE 1=1";
         Map<String,Object> map = new HashMap<>();
 
-        if(params.getCategory() != null) {
-            sql = sql + " AND category = :category";
-            map.put("category", params.getCategory().name());
-        }
-
-        if(params.getSearch() != null && !params.getSearch().isEmpty()) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + params.getSearch() + "%");
-        }
+        sql = addFilterySql(sql, map, params);
 
         Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
         return total;
@@ -138,5 +122,18 @@ public class ProductDaoImpl implements ProductDao {
         map.put("productId", productId);
 
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    private String addFilterySql(String sql, Map<String,Object> map, ProductQueryParams params) {
+        if(params.getCategory() != null) {
+            sql = sql + " AND category = :category";
+            map.put("category", params.getCategory().name());
+        }
+
+        if(params.getSearch() != null && !params.getSearch().isEmpty()) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + params.getSearch() + "%");
+        }
+        return sql;
     }
 }
