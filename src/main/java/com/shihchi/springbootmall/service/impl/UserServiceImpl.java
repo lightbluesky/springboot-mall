@@ -7,7 +7,9 @@ import com.shihchi.springbootmall.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -19,13 +21,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer register(UserRegisterRequest userRegisterRequest){
-        try {
-            return userDao.createUser(userRegisterRequest);
-        } catch (Exception e) {
-            logger.error("Register error - email = {} - {}", userRegisterRequest.getEmail(), e.getMessage());
-            throw e;
+        User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
+
+        if(user != null) {
+            logger.warn("Register error - the email {} is registered", userRegisterRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        return userDao.createUser(userRegisterRequest);
     };
 
     @Override
